@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/reactGA/static/css/main.605834ba.css",
-    "main.js": "/reactGA/static/js/main.ab2568df.js",
-    "index.html": "/reactGA/index.html",
-    "main.605834ba.css.map": "/reactGA/static/css/main.605834ba.css.map",
-    "main.ab2568df.js.map": "/reactGA/static/js/main.ab2568df.js.map"
+    "main.css": "/static/css/main.605834ba.css",
+    "main.js": "/static/js/main.ab2568df.js",
+    "index.html": "/index.html",
+    "main.605834ba.css.map": "/static/css/main.605834ba.css.map",
+    "main.ab2568df.js.map": "/static/js/main.ab2568df.js.map"
   },
   "entrypoints": [
     "static/css/main.605834ba.css",

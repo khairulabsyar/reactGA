@@ -1,5 +1,6 @@
-import { Form, useLoaderData, useFetcher } from "react-router-dom";
+import { Form, useLoaderData, useFetcher, useLocation } from "react-router-dom";
 import { getContact, updateContact } from "../contacts";
+import ReactGA from "react-ga4";
 
 export async function loader({ params }) {
   const contact = await getContact(params.contactId);
@@ -21,6 +22,26 @@ export async function action({ request, params }) {
 
 export default function Contact() {
   const { contact } = useLoaderData();
+  const location = useLocation();
+  const id = location.pathname.split("/").pop();
+
+  ReactGA.send({ hitType: "pageview", page: location.pathname });
+
+  const clickedEditButton = () => {
+    ReactGA.event("select_item", {
+      action: "Clicked Edit",
+      category: "Edit",
+      label: id,
+    });
+  };
+
+  const clickedDeleteButton = () => {
+    ReactGA.event("select_item", {
+      action: "Clicked Delete",
+      category: "Delete",
+      label: id,
+    });
+  };
 
   return (
     <div id='contact'>
@@ -57,10 +78,14 @@ export default function Contact() {
 
         <div>
           <Form action='edit'>
-            <button type='submit'>Edit</button>
+            <button type='submit' onClick={clickedEditButton}>
+              Edit
+            </button>
           </Form>
           <Form method='post' action='destroy'>
-            <button type='submit'>Delete</button>
+            <button type='submit' onClick={clickedDeleteButton}>
+              Delete
+            </button>
           </Form>
         </div>
       </div>

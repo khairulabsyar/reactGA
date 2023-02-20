@@ -1,16 +1,27 @@
-import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
+import {
+  Form,
+  useLoaderData,
+  redirect,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { updateContact } from "../contacts";
+import ReactGA from "react-ga4";
 
 export async function action({ request, params }) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   await updateContact(params.contactId, updates);
-  return redirect(`/contacts/${params.contactId}/edit`);
+  return redirect(`/contacts/${params.contactId}`);
 }
 
 export default function EditContact() {
   const { contact } = useLoaderData();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location.pathname);
+  ReactGA.send({ hitType: "pageview", page: location.pathname });
 
   return (
     <Form method='post' id='contact-form'>

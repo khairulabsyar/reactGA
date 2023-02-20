@@ -6,8 +6,10 @@ import {
   NavLink,
   useNavigation,
   useSubmit,
+  Link,
 } from "react-router-dom";
 import { getContacts, createContact } from "../contacts";
+import ReactGA from "react-ga4";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -34,10 +36,23 @@ export default function Root() {
     document.getElementById("search").value = search;
   }, [search]);
 
+  const clickedNewButton = () => {
+    ReactGA.event("select_item", {
+      action: "Create New",
+      category: "New",
+    });
+  };
+
+  const selectEvent = (id) => {
+    ReactGA.event({
+      action: "Select User",
+      category: "Select",
+      id: id,
+    });
+  };
   return (
     <>
       <div id='sidebar'>
-        <h1>Google Analytics 4</h1>
         <div>
           <Form id='search-Form' role='search'>
             <input
@@ -57,7 +72,9 @@ export default function Root() {
             <div className='sr-only' aria-live='polite'></div>
           </Form>
           <Form method='post'>
-            <button type='submit'>New</button>
+            <button type='submit' onClick={clickedNewButton}>
+              New
+            </button>
           </Form>
         </div>
         <nav>
@@ -70,6 +87,7 @@ export default function Root() {
                     className={({ isActive, isPending }) =>
                       isActive ? "active" : isPending ? "pending" : ""
                     }
+                    onClick={selectEvent(contact.id)}
                   >
                     {contact.first || contact.last ? (
                       <>
@@ -89,6 +107,9 @@ export default function Root() {
             </p>
           )}
         </nav>
+        <Link to={"/"} style={{ textDecoration: "none" }}>
+          <h1>Google Analytics 4</h1>
+        </Link>
       </div>
       <div
         id='detail'

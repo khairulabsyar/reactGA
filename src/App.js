@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  createBrowserRouter,
   createHashRouter,
   createRoutesFromElements,
   Route,

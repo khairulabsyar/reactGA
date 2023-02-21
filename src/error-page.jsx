@@ -1,4 +1,5 @@
 import { useNavigate, useRouteError } from "react-router-dom";
+import { AnalyticEvent } from "./utils/functions";
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -14,6 +15,7 @@ export default function ErrorPage() {
       <button
         type='button'
         onClick={() => {
+          AnalyticEvent("Error Page", "URL Error");
           navigate(-1);
         }}
       >

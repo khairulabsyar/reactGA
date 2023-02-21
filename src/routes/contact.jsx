@@ -1,10 +1,12 @@
 import { Form, useLoaderData, useFetcher, useLocation } from "react-router-dom";
 import { getContact, updateContact } from "../contacts";
 import ReactGA from "react-ga4";
+import { AnalyticEvent } from "../utils/functions";
 
 export async function loader({ params }) {
   const contact = await getContact(params.contactId);
   if (!contact) {
+    AnalyticEvent("Error on User", "User doesn't exist");
     throw new Response("", {
       status: 404,
       statusText: "User does not exist",
@@ -23,25 +25,8 @@ export async function action({ request, params }) {
 export default function Contact() {
   const { contact } = useLoaderData();
   const location = useLocation();
-  const id = location.pathname.split("/").pop();
 
   ReactGA.send({ hitType: "pageview", page: location.pathname });
-
-  const clickedEditButton = () => {
-    ReactGA.event("select_item", {
-      action: "Clicked Edit",
-      category: "Edit",
-      label: id,
-    });
-  };
-
-  const clickedDeleteButton = () => {
-    ReactGA.event("select_item", {
-      action: "Clicked Delete",
-      category: "Delete",
-      label: id,
-    });
-  };
 
   return (
     <div id='contact'>
@@ -78,12 +63,18 @@ export default function Contact() {
 
         <div>
           <Form action='edit'>
-            <button type='submit' onClick={clickedEditButton}>
+            <button
+              type='submit'
+              onClick={AnalyticEvent("Clicked Edit", "Edit")}
+            >
               Edit
             </button>
           </Form>
           <Form method='post' action='destroy'>
-            <button type='submit' onClick={clickedDeleteButton}>
+            <button
+              type='submit'
+              onClick={AnalyticEvent("Clicked Delete", "Delete")}
+            >
               Delete
             </button>
           </Form>

@@ -9,7 +9,7 @@ import {
   Link,
 } from "react-router-dom";
 import { getContacts, createContact } from "../contacts";
-import ReactGA from "react-ga4";
+import { AnalyticEvent } from "../utils/functions";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -36,20 +36,6 @@ export default function Root() {
     document.getElementById("search").value = search;
   }, [search]);
 
-  const clickedNewButton = () => {
-    ReactGA.event("select_item", {
-      action: "Create New",
-      category: "New",
-    });
-  };
-
-  const selectEvent = (id) => {
-    ReactGA.event({
-      action: "Select User",
-      category: "Select",
-      id: id,
-    });
-  };
   return (
     <>
       <div id='sidebar'>
@@ -72,7 +58,7 @@ export default function Root() {
             <div className='sr-only' aria-live='polite'></div>
           </Form>
           <Form method='post'>
-            <button type='submit' onClick={clickedNewButton}>
+            <button type='submit' onClick={AnalyticEvent("Create New", "New")}>
               New
             </button>
           </Form>
@@ -87,7 +73,7 @@ export default function Root() {
                     className={({ isActive, isPending }) =>
                       isActive ? "active" : isPending ? "pending" : ""
                     }
-                    onClick={selectEvent(contact.id)}
+                    onClick={AnalyticEvent("Select User", "Select", contact.id)}
                   >
                     {contact.first || contact.last ? (
                       <>
@@ -107,7 +93,11 @@ export default function Root() {
             </p>
           )}
         </nav>
-        <Link to={"/"} style={{ textDecoration: "none" }}>
+        <Link
+          to={"/"}
+          style={{ textDecoration: "none" }}
+          onClick={AnalyticEvent("Clicked Home", "Home")}
+        >
           <h1>Google Analytics 4</h1>
         </Link>
       </div>

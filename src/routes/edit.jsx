@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { updateContact } from "../contacts";
 import ReactGA from "react-ga4";
+import { AnalyticEvent } from "../utils/functions";
 
 export async function action({ request, params }) {
   const formData = await request.formData();
@@ -20,7 +21,6 @@ export default function EditContact() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(location.pathname);
   ReactGA.send({ hitType: "pageview", page: location.pathname });
 
   return (
@@ -66,10 +66,16 @@ export default function EditContact() {
         <textarea name='notes' defaultValue={contact.notes} rows={6} />
       </label>
       <p>
-        <button type='submit'>Save</button>
+        <button
+          type='submit'
+          onClick={AnalyticEvent("form_submit", "Clicked Save", "Save")}
+        >
+          Save
+        </button>
         <button
           type='button'
           onClick={() => {
+            AnalyticEvent("Cancel Edit", "Cancel");
             navigate(-1);
           }}
         >
